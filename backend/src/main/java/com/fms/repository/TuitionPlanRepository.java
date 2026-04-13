@@ -11,6 +11,6 @@ import java.util.List;
 public interface TuitionPlanRepository extends JpaRepository<TuitionPlan, Long> {
 
     List<TuitionPlan> findByUser(User user);
-
+    List<TuitionPlan> findTopByUserOrderByCreatedAtDesc(User user);
     List<TuitionPlan> findByUserOrderByCreatedAtDesc(User user);
 }
