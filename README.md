@@ -43,7 +43,6 @@ Financial-Management-System/
 ---
 
 ## Getting Started
-
 ### Prerequisites
 
 - Java 17+
