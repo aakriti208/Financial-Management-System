@@ -11,12 +11,12 @@ const SOURCE_LABEL = {
   OTHER: 'Other',
 }
 
-const SOURCE_COLOR = {
-  SCHOLARSHIP: 'bg-blue-100 text-blue-800',
-  ASSISTANTSHIP: 'bg-purple-100 text-purple-800',
-  PART_TIME_WORK: 'bg-green-100 text-green-800',
-  FAMILY_SUPPORT: 'bg-yellow-100 text-yellow-800',
-  OTHER: 'bg-gray-100 text-gray-700',
+const SOURCE_BADGE = {
+  SCHOLARSHIP: 'badge-blue',
+  ASSISTANTSHIP: 'badge-purple',
+  PART_TIME_WORK: 'badge-green',
+  FAMILY_SUPPORT: 'badge-amber',
+  OTHER: 'badge-gray',
 }
 
 function IncomePage() {
@@ -36,9 +36,7 @@ function IncomePage() {
     }
   }
 
-  useEffect(() => {
-    fetchIncomes()
-  }, [])
+  useEffect(() => { fetchIncomes() }, [])
 
   const handleDelete = async (id) => {
     try {
@@ -54,15 +52,20 @@ function IncomePage() {
   const totalIncome = incomes.reduce((sum, i) => sum + parseFloat(i.amount), 0)
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-slate-50">
       <Navbar />
-      <main className="container mx-auto p-6">
+      <main className="container mx-auto px-6 py-8 max-w-5xl">
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-3xl font-bold text-gray-800">Income</h1>
+          <div>
+            <h1 className="text-2xl font-bold text-slate-800">Income</h1>
+            <p className="text-sm text-slate-500 mt-0.5">Track all your income sources</p>
+          </div>
           {incomes.length > 0 && (
-            <div className="text-right">
-              <p className="text-sm text-gray-500">Total</p>
-              <p className="text-2xl font-bold text-green-600">${totalIncome.toFixed(2)}</p>
+            <div className="card px-5 py-3 text-right">
+              <p className="text-xs text-slate-400 uppercase tracking-wider">Total Income</p>
+              <p className="text-xl font-bold text-emerald-600 mt-0.5">
+                ${totalIncome.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+              </p>
             </div>
           )}
         </div>
@@ -73,65 +76,58 @@ function IncomePage() {
           onCancelEdit={() => setEditRecord(null)}
         />
 
-        <div className="mt-8 bg-white rounded-lg shadow overflow-hidden">
+        <div className="card mt-6 overflow-hidden">
           {loading ? (
-            <p className="p-6 text-gray-400">Loading...</p>
+            <div className="p-8 text-center text-slate-400 text-sm">Loading...</div>
           ) : incomes.length === 0 ? (
-            <p className="p-6 text-gray-400">No income records yet. Add your first one above.</p>
+            <div className="p-8 text-center">
+              <p className="text-slate-400 text-sm">No income records yet.</p>
+              <p className="text-slate-300 text-xs mt-1">Add your first income source above.</p>
+            </div>
           ) : (
             <table className="w-full text-sm">
-              <thead className="bg-gray-50 border-b border-gray-200">
-                <tr>
-                  <th className="text-left px-4 py-3 font-semibold text-gray-600">Date</th>
-                  <th className="text-left px-4 py-3 font-semibold text-gray-600">Source</th>
-                  <th className="text-left px-4 py-3 font-semibold text-gray-600">Type</th>
-                  <th className="text-right px-4 py-3 font-semibold text-gray-600">Amount</th>
-                  <th className="text-left px-4 py-3 font-semibold text-gray-600">Description</th>
-                  <th className="px-4 py-3"></th>
+              <thead>
+                <tr className="border-b border-slate-100 bg-slate-50">
+                  <th className="text-left px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wider">Date</th>
+                  <th className="text-left px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wider">Source</th>
+                  <th className="text-left px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wider">Type</th>
+                  <th className="text-right px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wider">Amount</th>
+                  <th className="text-left px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wider">Notes</th>
+                  <th className="px-5 py-3"></th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
+              <tbody className="divide-y divide-slate-50">
                 {incomes.map(income => (
-                  <tr key={income.id} className="hover:bg-gray-50">
-                    <td className="px-4 py-3 text-gray-600">{income.date}</td>
-                    <td className="px-4 py-3 font-medium text-gray-800">{income.source}</td>
-                    <td className="px-4 py-3">
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${SOURCE_COLOR[income.sourceType]}`}>
+                  <tr key={income.id} className="hover:bg-slate-50/60 transition-colors">
+                    <td className="px-5 py-3.5 text-slate-500 text-xs">{income.date}</td>
+                    <td className="px-5 py-3.5 font-medium text-slate-700">{income.source}</td>
+                    <td className="px-5 py-3.5">
+                      <span className={SOURCE_BADGE[income.sourceType]}>
                         {SOURCE_LABEL[income.sourceType]}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-right font-semibold text-green-600">
-                      ${parseFloat(income.amount).toFixed(2)}
+                    <td className="px-5 py-3.5 text-right font-semibold text-emerald-600">
+                      +${parseFloat(income.amount).toLocaleString('en-US', { minimumFractionDigits: 2 })}
                     </td>
-                    <td className="px-4 py-3 text-gray-500">{income.description || '—'}</td>
-                    <td className="px-4 py-3">
-                      <div className="flex gap-2 justify-end">
+                    <td className="px-5 py-3.5 text-slate-400 text-xs">{income.description || '—'}</td>
+                    <td className="px-5 py-3.5">
+                      <div className="flex gap-3 justify-end">
                         <button
                           onClick={() => { setEditRecord(income); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
-                          className="text-blue-600 hover:text-blue-800 text-xs font-medium"
+                          className="text-xs font-medium text-slate-400 hover:text-[#0f2035] transition-colors"
                         >
                           Edit
                         </button>
                         {deleteId === income.id ? (
-                          <span className="flex gap-1 items-center">
-                            <button
-                              onClick={() => handleDelete(income.id)}
-                              className="text-red-600 hover:text-red-800 text-xs font-medium"
-                            >
-                              Confirm
-                            </button>
-                            <button
-                              onClick={() => setDeleteId(null)}
-                              className="text-gray-500 hover:text-gray-700 text-xs"
-                            >
-                              Cancel
-                            </button>
+                          <span className="flex gap-2 items-center">
+                            <button onClick={() => handleDelete(income.id)}
+                              className="text-xs font-medium text-rose-500 hover:text-rose-700">Confirm</button>
+                            <button onClick={() => setDeleteId(null)}
+                              className="text-xs text-slate-400 hover:text-slate-600">Cancel</button>
                           </span>
                         ) : (
-                          <button
-                            onClick={() => setDeleteId(income.id)}
-                            className="text-red-500 hover:text-red-700 text-xs font-medium"
-                          >
+                          <button onClick={() => setDeleteId(income.id)}
+                            className="text-xs font-medium text-slate-400 hover:text-rose-500 transition-colors">
                             Delete
                           </button>
                         )}

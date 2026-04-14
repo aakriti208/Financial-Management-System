@@ -21,9 +21,7 @@ function ExpensePage() {
     }
   }
 
-  useEffect(() => {
-    fetchExpenses()
-  }, [])
+  useEffect(() => { fetchExpenses() }, [])
 
   const handleDelete = async (id) => {
     try {
@@ -44,29 +42,42 @@ function ExpensePage() {
   const fixedTotal = expenses.filter(e => e.expenseType === 'FIXED').reduce((sum, e) => sum + parseFloat(e.amount), 0)
   const variableTotal = expenses.filter(e => e.expenseType === 'VARIABLE').reduce((sum, e) => sum + parseFloat(e.amount), 0)
 
+  const FILTERS = ['ALL', 'FIXED', 'VARIABLE', 'ESSENTIAL', 'DISCRETIONARY']
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-slate-50">
       <Navbar />
-      <main className="container mx-auto p-6">
+      <main className="container mx-auto px-6 py-8 max-w-5xl">
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-3xl font-bold text-gray-800">Expenses</h1>
+          <div>
+            <h1 className="text-2xl font-bold text-slate-800">Expenses</h1>
+            <p className="text-sm text-slate-500 mt-0.5">Categorize and track your spending</p>
+          </div>
           {expenses.length > 0 && (
-            <div className="text-right">
-              <p className="text-sm text-gray-500">Total</p>
-              <p className="text-2xl font-bold text-red-500">${totalExpenses.toFixed(2)}</p>
+            <div className="card px-5 py-3 text-right">
+              <p className="text-xs text-slate-400 uppercase tracking-wider">Total Expenses</p>
+              <p className="text-xl font-bold text-rose-500 mt-0.5">
+                ${totalExpenses.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+              </p>
             </div>
           )}
         </div>
 
         {expenses.length > 0 && (
           <div className="grid grid-cols-2 gap-4 mb-6">
-            <div className="bg-white rounded-lg shadow p-4">
-              <p className="text-sm text-gray-500">Fixed</p>
-              <p className="text-xl font-bold text-gray-800">${fixedTotal.toFixed(2)}</p>
+            <div className="card p-4 border-l-4 border-l-amber-400">
+              <p className="text-xs text-slate-400 uppercase tracking-wider">Fixed</p>
+              <p className="text-lg font-bold text-slate-700 mt-1">
+                ${fixedTotal.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+              </p>
+              <p className="text-xs text-slate-400 mt-0.5">Rent, insurance, subscriptions</p>
             </div>
-            <div className="bg-white rounded-lg shadow p-4">
-              <p className="text-sm text-gray-500">Variable</p>
-              <p className="text-xl font-bold text-gray-800">${variableTotal.toFixed(2)}</p>
+            <div className="card p-4 border-l-4 border-l-blue-400">
+              <p className="text-xs text-slate-400 uppercase tracking-wider">Variable</p>
+              <p className="text-lg font-bold text-slate-700 mt-1">
+                ${variableTotal.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+              </p>
+              <p className="text-xs text-slate-400 mt-0.5">Food, transport, entertainment</p>
             </div>
           </div>
         )}
@@ -77,95 +88,80 @@ function ExpensePage() {
           onCancelEdit={() => setEditRecord(null)}
         />
 
-        <div className="mt-8 bg-white rounded-lg shadow overflow-hidden">
-          <div className="flex gap-2 p-4 border-b border-gray-100">
-            {['ALL', 'FIXED', 'VARIABLE', 'ESSENTIAL', 'DISCRETIONARY'].map(f => (
+        <div className="card mt-6 overflow-hidden">
+          <div className="flex gap-2 px-5 py-3 border-b border-slate-100">
+            {FILTERS.map(f => (
               <button
                 key={f}
                 onClick={() => setFilter(f)}
                 className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
                   filter === f
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    ? 'bg-[#0f2035] text-white'
+                    : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
                 }`}
               >
-                {f.charAt(0) + f.slice(1).toLowerCase()}
+                {f === 'ALL' ? 'All' : f.charAt(0) + f.slice(1).toLowerCase()}
               </button>
             ))}
           </div>
 
           {loading ? (
-            <p className="p-6 text-gray-400">Loading...</p>
+            <div className="p-8 text-center text-slate-400 text-sm">Loading...</div>
           ) : filtered.length === 0 ? (
-            <p className="p-6 text-gray-400">No expense records yet. Add your first one above.</p>
+            <div className="p-8 text-center">
+              <p className="text-slate-400 text-sm">No expense records yet.</p>
+              <p className="text-slate-300 text-xs mt-1">Add your first expense above.</p>
+            </div>
           ) : (
             <table className="w-full text-sm">
-              <thead className="bg-gray-50 border-b border-gray-200">
-                <tr>
-                  <th className="text-left px-4 py-3 font-semibold text-gray-600">Date</th>
-                  <th className="text-left px-4 py-3 font-semibold text-gray-600">Category</th>
-                  <th className="text-left px-4 py-3 font-semibold text-gray-600">Type</th>
-                  <th className="text-left px-4 py-3 font-semibold text-gray-600">Necessity</th>
-                  <th className="text-right px-4 py-3 font-semibold text-gray-600">Amount</th>
-                  <th className="text-left px-4 py-3 font-semibold text-gray-600">Description</th>
-                  <th className="px-4 py-3"></th>
+              <thead>
+                <tr className="bg-slate-50">
+                  <th className="text-left px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wider">Date</th>
+                  <th className="text-left px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wider">Category</th>
+                  <th className="text-left px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wider">Type</th>
+                  <th className="text-left px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wider">Necessity</th>
+                  <th className="text-right px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wider">Amount</th>
+                  <th className="text-left px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wider">Notes</th>
+                  <th className="px-5 py-3"></th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
+              <tbody className="divide-y divide-slate-50">
                 {filtered.map(expense => (
-                  <tr key={expense.id} className="hover:bg-gray-50">
-                    <td className="px-4 py-3 text-gray-600">{expense.date}</td>
-                    <td className="px-4 py-3 font-medium text-gray-800">{expense.category}</td>
-                    <td className="px-4 py-3">
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        expense.expenseType === 'FIXED'
-                          ? 'bg-orange-100 text-orange-800'
-                          : 'bg-teal-100 text-teal-800'
-                      }`}>
+                  <tr key={expense.id} className="hover:bg-slate-50/60 transition-colors">
+                    <td className="px-5 py-3.5 text-slate-500 text-xs">{expense.date}</td>
+                    <td className="px-5 py-3.5 font-medium text-slate-700">{expense.category}</td>
+                    <td className="px-5 py-3.5">
+                      <span className={expense.expenseType === 'FIXED' ? 'badge-amber' : 'badge-blue'}>
                         {expense.expenseType === 'FIXED' ? 'Fixed' : 'Variable'}
                       </span>
                     </td>
-                    <td className="px-4 py-3">
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        expense.necessity === 'ESSENTIAL'
-                          ? 'bg-green-100 text-green-800'
-                          : 'bg-pink-100 text-pink-800'
-                      }`}>
+                    <td className="px-5 py-3.5">
+                      <span className={expense.necessity === 'ESSENTIAL' ? 'badge-green' : 'badge-gray'}>
                         {expense.necessity === 'ESSENTIAL' ? 'Essential' : 'Discretionary'}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-right font-semibold text-red-500">
-                      ${parseFloat(expense.amount).toFixed(2)}
+                    <td className="px-5 py-3.5 text-right font-semibold text-rose-500">
+                      −${parseFloat(expense.amount).toLocaleString('en-US', { minimumFractionDigits: 2 })}
                     </td>
-                    <td className="px-4 py-3 text-gray-500">{expense.description || '—'}</td>
-                    <td className="px-4 py-3">
-                      <div className="flex gap-2 justify-end">
+                    <td className="px-5 py-3.5 text-slate-400 text-xs">{expense.description || '—'}</td>
+                    <td className="px-5 py-3.5">
+                      <div className="flex gap-3 justify-end">
                         <button
                           onClick={() => { setEditRecord(expense); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
-                          className="text-blue-600 hover:text-blue-800 text-xs font-medium"
+                          className="text-xs font-medium text-slate-400 hover:text-[#0f2035] transition-colors"
                         >
                           Edit
                         </button>
                         {deleteId === expense.id ? (
-                          <span className="flex gap-1 items-center">
-                            <button
-                              onClick={() => handleDelete(expense.id)}
-                              className="text-red-600 hover:text-red-800 text-xs font-medium"
-                            >
-                              Confirm
-                            </button>
-                            <button
-                              onClick={() => setDeleteId(null)}
-                              className="text-gray-500 hover:text-gray-700 text-xs"
-                            >
-                              Cancel
-                            </button>
+                          <span className="flex gap-2 items-center">
+                            <button onClick={() => handleDelete(expense.id)}
+                              className="text-xs font-medium text-rose-500 hover:text-rose-700">Confirm</button>
+                            <button onClick={() => setDeleteId(null)}
+                              className="text-xs text-slate-400 hover:text-slate-600">Cancel</button>
                           </span>
                         ) : (
-                          <button
-                            onClick={() => setDeleteId(expense.id)}
-                            className="text-red-500 hover:text-red-700 text-xs font-medium"
-                          >
+                          <button onClick={() => setDeleteId(expense.id)}
+                            className="text-xs font-medium text-slate-400 hover:text-rose-500 transition-colors">
                             Delete
                           </button>
                         )}
