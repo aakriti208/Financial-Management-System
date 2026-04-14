@@ -1,5 +1,7 @@
 package com.fms.dto;
 
+import com.fms.model.ExpenseType;
+import com.fms.model.Necessity;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -19,6 +21,12 @@ public class ExpenseDTO {
 
     @NotBlank
     private String category;
+
+    @NotNull
+    private ExpenseType expenseType;
+
+    @NotNull
+    private Necessity necessity;
 
     @NotNull
     private LocalDate date;

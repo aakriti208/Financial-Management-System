@@ -29,6 +29,14 @@ public class Expense {
     @Column(nullable = false)
     private String category;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private ExpenseType expenseType;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Necessity necessity;
+
     @Column(nullable = false)
     private LocalDate date;
 

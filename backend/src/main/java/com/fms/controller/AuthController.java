@@ -16,19 +16,13 @@ public class AuthController {
 
     private final AuthService authService;
 
-    // POST /api/auth/register
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request) {
-        // TODO: Call authService.register(request)
-        // TODO: Return ResponseEntity.status(201).body(response)
-        return null;
+        return ResponseEntity.status(201).body(authService.register(request));
     }
 
-    // POST /api/auth/login
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
-        // TODO: Call authService.login(request)
-        // TODO: Return ResponseEntity.ok(response)
-        return null;
+        return ResponseEntity.ok(authService.login(request));
     }
 }

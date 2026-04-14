@@ -29,6 +29,10 @@ public class Income {
     @Column(nullable = false)
     private String source;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private IncomeSourceType sourceType;
+
     @Column(nullable = false)
     private LocalDate date;
 

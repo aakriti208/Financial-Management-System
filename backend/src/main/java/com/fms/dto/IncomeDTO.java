@@ -1,5 +1,6 @@
 package com.fms.dto;
 
+import com.fms.model.IncomeSourceType;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -19,6 +20,9 @@ public class IncomeDTO {
 
     @NotBlank
     private String source;
+
+    @NotNull
+    private IncomeSourceType sourceType;
 
     @NotNull
     private LocalDate date;

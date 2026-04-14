@@ -1,7 +1,13 @@
 package com.fms.config;
 
+import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
+import java.util.Date;
 
 @Component
 public class JwtUtil {
@@ -12,32 +18,34 @@ public class JwtUtil {
     @Value("${jwt.expiration-ms:86400000}")
     private long jwtExpirationMs;
 
-    /**
-     * Generate a signed JWT token for the given email address.
-     * TODO: Use Jwts.builder() with subject=email, issuedAt=new Date(),
-     *       expiration=new Date(now + jwtExpirationMs), signWith(HS256, jwtSecret)
-     */
+    private Key getSigningKey() {
+        return Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
+    }
+
     public String generateToken(String email) {
-        // TODO: Implement token generation
-        return null;
+        return Jwts.builder()
+                .setSubject(email)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .compact();
     }
 
-    /**
-     * Validate a JWT token (signature + expiry).
-     * TODO: Use Jwts.parserBuilder().setSigningKey(jwtSecret).build().parseClaimsJws(token)
-     *       Catch JwtException and return false if invalid or expired
-     */
     public boolean validateToken(String token) {
-        // TODO: Implement token validation
-        return false;
+        try {
+            Jwts.parserBuilder().setSigningKey(getSigningKey()).build().parseClaimsJws(token);
+            return true;
+        } catch (JwtException e) {
+            return false;
+        }
     }
 
-    /**
-     * Extract the email (subject) claim from a JWT token.
-     * TODO: Parse token, call .getBody().getSubject()
-     */
     public String extractEmail(String token) {
-        // TODO: Implement claim extraction
-        return null;
+        return Jwts.parserBuilder()
+                .setSigningKey(getSigningKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
     }
 }
