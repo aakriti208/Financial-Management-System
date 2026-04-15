@@ -57,8 +57,8 @@ function IncomePage() {
       <main className="container mx-auto px-6 py-8 max-w-5xl">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-2xl font-bold text-slate-800">Income</h1>
-            <p className="text-sm text-slate-500 mt-0.5">Track all your income sources</p>
+            <h1 className="text-2xl font-extrabold text-slate-800 tracking-tight">Income</h1>
+            <p className="text-sm text-slate-400 mt-0.5 font-medium">Track all your income sources</p>
           </div>
           {incomes.length > 0 && (
             <div className="card px-5 py-3 text-right">

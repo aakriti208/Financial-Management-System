@@ -50,8 +50,8 @@ function ExpensePage() {
       <main className="container mx-auto px-6 py-8 max-w-5xl">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-2xl font-bold text-slate-800">Expenses</h1>
-            <p className="text-sm text-slate-500 mt-0.5">Categorize and track your spending</p>
+            <h1 className="text-2xl font-extrabold text-slate-800 tracking-tight">Expenses</h1>
+            <p className="text-sm text-slate-400 mt-0.5 font-medium">Categorize and track your spending</p>
           </div>
           {expenses.length > 0 && (
             <div className="card px-5 py-3 text-right">

@@ -13,5 +13,5 @@ public class DashboardSummaryDTO {
     private BigDecimal netBalance;
     private List<IncomeDTO> recentIncome;
     private List<ExpenseDTO> recentExpenses;
-    // TODO: Add monthly breakdown list, category totals, budget alerts
+    private List<MonthlyDataDTO> monthlyData;
 }
