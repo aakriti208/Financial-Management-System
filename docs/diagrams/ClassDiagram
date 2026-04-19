@@ -1,0 +1,54 @@
+digraph {
+	bgcolor=white compound=true dpi=200 fontname=Helvetica fontsize=18 label="Financial Management System — Overview Class Diagram\nCS 5394 Group 2 · Aakriti Dhakal · Agnes Jesionowska · Manoj Khanal" labeljust=c labelloc=t newrank=true nodesep=0.4 rankdir=TB ranksep=0.8 size="10,24!" splines=spline
+	node [fontname=Helvetica fontsize=12 shape=plain]
+	edge [arrowsize=0.8 fontname=Helvetica fontsize=10 penwidth=1.1]
+	subgraph cluster_fe {
+		color="#2E7D32" fillcolor="#F1F8E9" fontname="Helvetica-Bold" fontsize=14 label="Frontend (React)" style=filled
+		FE_Pages [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#DCEDC8"><TR><TD BGCOLOR="#C5E1A5" ALIGN="CENTER"><I>&#171;module&#187;</I></TD></TR><TR><TD BGCOLOR="#DCEDC8" ALIGN="CENTER"><B>Pages</B></TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR></TABLE>>]
+		FE_Components [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#DCEDC8"><TR><TD BGCOLOR="#C5E1A5" ALIGN="CENTER"><I>&#171;module&#187;</I></TD></TR><TR><TD BGCOLOR="#DCEDC8" ALIGN="CENTER"><B>Components</B></TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR></TABLE>>]
+		FE_Services_JS [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#DCEDC8"><TR><TD BGCOLOR="#C5E1A5" ALIGN="CENTER"><I>&#171;module&#187;</I></TD></TR><TR><TD BGCOLOR="#DCEDC8" ALIGN="CENTER"><B>Services (JS)</B></TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR></TABLE>>]
+		FE_axiosInstance [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#DCEDC8"><TR><TD BGCOLOR="#C5E1A5" ALIGN="CENTER"><I>&#171;module&#187;</I></TD></TR><TR><TD BGCOLOR="#DCEDC8" ALIGN="CENTER"><B>axiosInstance</B></TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR></TABLE>>]
+		FE_AuthContext [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#DCEDC8"><TR><TD BGCOLOR="#C5E1A5" ALIGN="CENTER"><I>&#171;module&#187;</I></TD></TR><TR><TD BGCOLOR="#DCEDC8" ALIGN="CENTER"><B>AuthContext</B></TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR></TABLE>>]
+	}
+	subgraph cluster_api {
+		color="#C62828" fillcolor="#FFEBEE" fontname="Helvetica-Bold" fontsize=14 label="REST API (HTTP + JWT)" style=filled
+		Controllers [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#FFCDD2"><TR><TD BGCOLOR="#EF9A9A" ALIGN="CENTER"><I>&#171;REST&#187;</I></TD></TR><TR><TD BGCOLOR="#FFCDD2" ALIGN="CENTER"><B>8 × @RestController</B></TD></TR><HR/><TR><TD ALIGN="LEFT">/auth</TD></TR><TR><TD ALIGN="LEFT">/income</TD></TR><TR><TD ALIGN="LEFT">/expense</TD></TR><TR><TD ALIGN="LEFT">/dashboard</TD></TR><TR><TD ALIGN="LEFT">/tuition</TD></TR><TR><TD ALIGN="LEFT">/prediction</TD></TR><TR><TD ALIGN="LEFT">/simulation</TD></TR><TR><TD ALIGN="LEFT">/ai</TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR></TABLE>>]
+	}
+	subgraph cluster_svc {
+		color="#1565C0" fillcolor="#E3F2FD" fontname="Helvetica-Bold" fontsize=14 label="Business Layer (Services)" style=filled
+		Services [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#BBDEFB"><TR><TD BGCOLOR="#90CAF9" ALIGN="CENTER"><I>&#171;interface + impl&#187;</I></TD></TR><TR><TD BGCOLOR="#BBDEFB" ALIGN="CENTER"><B>8 × @Service</B></TD></TR><HR/><TR><TD ALIGN="LEFT">AuthService</TD></TR><TR><TD ALIGN="LEFT">IncomeService</TD></TR><TR><TD ALIGN="LEFT">ExpenseService</TD></TR><TR><TD ALIGN="LEFT">DashboardService</TD></TR><TR><TD ALIGN="LEFT">TuitionService</TD></TR><TR><TD ALIGN="LEFT">ExpensePredictionService</TD></TR><TR><TD ALIGN="LEFT">WhatIfSimulationService</TD></TR><TR><TD ALIGN="LEFT">AIAdvisorService</TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR></TABLE>>]
+	}
+	subgraph cluster_repo {
+		color="#6A1B9A" fillcolor="#FBEAFF" fontname="Helvetica-Bold" fontsize=14 label="Data Access Layer" style=filled
+		Repositories [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#F3E5F5"><TR><TD BGCOLOR="#E1BEE7" ALIGN="CENTER"><I>&#171;interface&#187;</I></TD></TR><TR><TD BGCOLOR="#F3E5F5" ALIGN="CENTER"><B>4 × JpaRepository</B></TD></TR><HR/><TR><TD ALIGN="LEFT">UserRepository</TD></TR><TR><TD ALIGN="LEFT">IncomeRepository</TD></TR><TR><TD ALIGN="LEFT">ExpenseRepository</TD></TR><TR><TD ALIGN="LEFT">TuitionPlanRepository</TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR></TABLE>>]
+	}
+	subgraph cluster_model {
+		color="#4A6FA5" fillcolor="#F4F8FC" fontname="Helvetica-Bold" fontsize=14 label="Model (JPA Entities)" style=filled
+		Entities [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#E8F5E9"><TR><TD BGCOLOR="#C8E6C9" ALIGN="CENTER"><I>&#171;persistent&#187;</I></TD></TR><TR><TD BGCOLOR="#E8F5E9" ALIGN="CENTER"><B>4 × @Entity</B></TD></TR><HR/><TR><TD ALIGN="LEFT">User</TD></TR><TR><TD ALIGN="LEFT">Income</TD></TR><TR><TD ALIGN="LEFT">Expense</TD></TR><TR><TD ALIGN="LEFT">TuitionPlan</TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR></TABLE>>]
+	}
+	subgraph cluster_cfg {
+		color="#E65100" fillcolor="#FFF3E0" fontname="Helvetica-Bold" fontsize=14 label="Security / Config" style=filled
+		Security [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#FFE0B2"><TR><TD BGCOLOR="#FFCC80" ALIGN="CENTER"><I>&#171;@Configuration&#187;</I></TD></TR><TR><TD BGCOLOR="#FFE0B2" ALIGN="CENTER"><B>Security Stack</B></TD></TR><HR/><TR><TD ALIGN="LEFT">SecurityConfig</TD></TR><TR><TD ALIGN="LEFT">JwtAuthFilter</TD></TR><TR><TD ALIGN="LEFT">JwtUtil</TD></TR><TR><TD ALIGN="LEFT">CorsConfig</TD></TR><TR><TD ALIGN="LEFT">GlobalExceptionHandler</TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR></TABLE>>]
+	}
+	subgraph cluster_ext {
+		color="#37474F" fillcolor="#ECEFF1" fontname="Helvetica-Bold" fontsize=14 label=External style=filled
+		PostgreSQL [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#CFD8DC"><TR><TD BGCOLOR="#B0BEC5" ALIGN="CENTER"><I>&#171;database&#187;</I></TD></TR><TR><TD BGCOLOR="#CFD8DC" ALIGN="CENTER"><B>PostgreSQL</B></TD></TR><HR/><TR><TD ALIGN="LEFT">fms_db</TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR></TABLE>>]
+		OpenAI [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#CFD8DC"><TR><TD BGCOLOR="#B0BEC5" ALIGN="CENTER"><I>&#171;external service&#187;</I></TD></TR><TR><TD BGCOLOR="#CFD8DC" ALIGN="CENTER"><B>OpenAI API</B></TD></TR><HR/><TR><TD ALIGN="LEFT">chat/completions (gpt-4o-mini)</TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR></TABLE>>]
+	}
+	FE_Pages -> FE_Components [arrowhead=vee color="#2E7D32"]
+	FE_Pages -> FE_Services_JS [arrowhead=vee color="#2E7D32"]
+	FE_Services_JS -> FE_axiosInstance [arrowhead=vee color="#2E7D32"]
+	FE_Pages -> FE_AuthContext [arrowhead=open color="#2E7D32" style=dashed]
+	FE_axiosInstance -> Controllers [label="HTTPS + Bearer" arrowhead=vee color="#455A64" penwidth=2]
+	Security -> Controllers [label=JwtAuthFilter arrowhead=open color="#E65100" style=dashed]
+	Controllers -> Services [arrowhead=vee color="#C62828"]
+	Services -> Repositories [arrowhead=vee color="#1565C0"]
+	Repositories -> Entities [arrowhead=open color="#6A1B9A" style=dashed]
+	Entities -> PostgreSQL [label="Hibernate / JPA" arrowhead=vee color="#455A64"]
+	Services -> OpenAI [label=AIAdvisorService arrowhead=vee color="#1565C0" style=dashed]
+	FE_Pages -> Controllers [style=invis weight=200]
+	Controllers -> Services [style=invis weight=200]
+	Services -> Repositories [style=invis weight=200]
+	Repositories -> Entities [style=invis weight=200]
+	Entities -> PostgreSQL [style=invis weight=200]
+}

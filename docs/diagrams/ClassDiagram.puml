@@ -1,0 +1,442 @@
+@startuml FMS_ClassDiagram
+' =============================================================
+' Financial Management System (FMS) - UML Class Diagram
+' Course: CS 5394 - Group 2
+' Authors: Aakriti Dhakal, Agnes Jesionowska, Manoj Khanal
+' Source of truth: SRS_Draft.pdf v1.0
+' =============================================================
+
+skinparam dpi 140
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam linetype ortho
+skinparam classBackgroundColor #FAFAFA
+skinparam classBorderColor #333333
+skinparam packageBackgroundColor #F4F8FC
+skinparam packageBorderColor #4A6FA5
+skinparam stereotypeCBackgroundColor #E3F2FD
+skinparam stereotypeIBackgroundColor #FFF3E0
+
+title Financial Management System — Class Diagram (Full MVC Stack)
+
+' ============================================================
+' MODEL (JPA Entities)
+' ============================================================
+package "com.fms.model <<Entity>>" as modelPkg {
+  class User <<@Entity>> {
+    - id : Long
+    - firstName : String
+    - lastName : String
+    - email : String  {unique}
+    - passwordHash : String
+    - createdAt : Instant
+    + getId() : Long
+    + getEmail() : String
+    + getFirstName() : String
+    + getLastName() : String
+    + getPasswordHash() : String
+  }
+
+  class Income <<@Entity>> {
+    - id : Long
+    - amount : BigDecimal
+    - source : String
+    - date : LocalDate
+    - description : String
+    - user : User
+    + getId() : Long
+    + getAmount() : BigDecimal
+    + getSource() : String
+    + getDate() : LocalDate
+  }
+
+  class Expense <<@Entity>> {
+    - id : Long
+    - amount : BigDecimal
+    - category : String
+    - date : LocalDate
+    - description : String
+    - user : User
+    + getId() : Long
+    + getAmount() : BigDecimal
+    + getCategory() : String
+    + getDate() : LocalDate
+  }
+
+  class TuitionPlan <<@Entity>> {
+    - id : Long
+    - tuitionPerCourse : BigDecimal
+    - numberOfCourses : Integer
+    - scholarshipAmount : BigDecimal
+    - createdAt : Instant
+    - user : User
+  }
+}
+
+User "1" *-- "0..*" Income       : owns >
+User "1" *-- "0..*" Expense      : owns >
+User "1" *-- "0..*" TuitionPlan  : owns >
+
+' ============================================================
+' DTO Layer
+' ============================================================
+package "com.fms.dto" as dtoPkg {
+  class RegisterRequest << (D,#FFEF9F) DTO >> {
+    + firstName : String
+    + lastName : String
+    + email : String
+    + password : String
+  }
+  class LoginRequest << (D,#FFEF9F) DTO >> {
+    + email : String
+    + password : String
+  }
+  class AuthResponse << (D,#FFEF9F) DTO >> {
+    + token : String
+    + email : String
+    + firstName : String
+    + lastName : String
+  }
+  class IncomeDTO << (D,#FFEF9F) DTO >> {
+    + id : Long
+    + amount : BigDecimal
+    + source : String
+    + date : LocalDate
+    + description : String
+  }
+  class ExpenseDTO << (D,#FFEF9F) DTO >> {
+    + id : Long
+    + amount : BigDecimal
+    + category : String
+    + date : LocalDate
+    + description : String
+  }
+  class DashboardSummaryDTO << (D,#FFEF9F) DTO >> {
+    + totalIncome : BigDecimal
+    + totalExpenses : BigDecimal
+    + netBalance : BigDecimal
+    + recentIncome : List<IncomeDTO>
+    + recentExpenses : List<ExpenseDTO>
+    + expenseByCategory : Map<String,BigDecimal>
+  }
+  class TuitionRequestDTO << (D,#FFEF9F) DTO >> {
+    + tuitionPerCourse : BigDecimal
+    + numberOfCourses : Integer
+    + scholarshipAmount : BigDecimal
+    + monthsUntilDue : Integer
+  }
+  class TuitionResultDTO << (D,#FFEF9F) DTO >> {
+    + totalTuition : BigDecimal
+    + netTuition : BigDecimal
+    + projectedSavings : BigDecimal
+    + affordable : boolean
+    + message : String
+  }
+  class PredictionResultDTO << (D,#FFEF9F) DTO >> {
+    + predictedNextMonth : BigDecimal
+    + monthsUsed : int
+    + history : List<MonthlyTotal>
+  }
+  class SimulationRequestDTO << (D,#FFEF9F) DTO >> {
+    + hypotheticalMonthlyIncome : BigDecimal
+    + hypotheticalMonthlyExpenses : BigDecimal
+    + projectionMonths : Integer
+  }
+  class SimulationResultDTO << (D,#FFEF9F) DTO >> {
+    + hypotheticalMonthlySurplus : BigDecimal
+    + projectedEndingBalance : BigDecimal
+    + timeline : List<MonthPoint>
+    + verdict : String
+  }
+  class AIQueryDTO << (D,#FFEF9F) DTO >> {
+    + question : String
+  }
+  class AIResponseDTO << (D,#FFEF9F) DTO >> {
+    + answer : String
+    + dataPointsUsed : List<String>
+  }
+}
+
+' ============================================================
+' Repository Layer (Spring Data JPA)
+' ============================================================
+package "com.fms.repository" as repoPkg {
+  interface UserRepository <<JpaRepository>> {
+    + findByEmail(email : String) : Optional<User>
+    + existsByEmail(email : String) : boolean
+  }
+  interface IncomeRepository <<JpaRepository>> {
+    + findByUserOrderByDateDesc(user : User) : List<Income>
+    + findByUserAndDateBetween(user : User, from : LocalDate, to : LocalDate) : List<Income>
+  }
+  interface ExpenseRepository <<JpaRepository>> {
+    + findByUserOrderByDateDesc(user : User) : List<Expense>
+    + findByUserAndDateBetween(user : User, from : LocalDate, to : LocalDate) : List<Expense>
+    + sumByCategory(user : User) : List<Object[]>
+  }
+  interface TuitionPlanRepository <<JpaRepository>> {
+    + findByUserOrderByCreatedAtDesc(user : User) : List<TuitionPlan>
+  }
+}
+
+UserRepository        ..> User
+IncomeRepository      ..> Income
+ExpenseRepository     ..> Expense
+TuitionPlanRepository ..> TuitionPlan
+
+' ============================================================
+' Service Layer (Interface + Impl)
+' ============================================================
+package "com.fms.service" as svcPkg {
+  interface AuthService {
+    + register(req : RegisterRequest) : AuthResponse
+    + login(req : LoginRequest) : AuthResponse
+  }
+  interface IncomeService {
+    + list() : List<IncomeDTO>
+    + create(dto : IncomeDTO) : IncomeDTO
+    + update(id : Long, dto : IncomeDTO) : IncomeDTO
+    + delete(id : Long) : void
+  }
+  interface ExpenseService {
+    + list() : List<ExpenseDTO>
+    + create(dto : ExpenseDTO) : ExpenseDTO
+    + update(id : Long, dto : ExpenseDTO) : ExpenseDTO
+    + delete(id : Long) : void
+  }
+  interface DashboardService {
+    + getSummary() : DashboardSummaryDTO
+  }
+  interface TuitionService {
+    + calculate(req : TuitionRequestDTO) : TuitionResultDTO
+  }
+  interface ExpensePredictionService {
+    + predictNextMonth() : PredictionResultDTO
+  }
+  interface WhatIfSimulationService {
+    + runSimulation(req : SimulationRequestDTO) : SimulationResultDTO
+  }
+  interface AIAdvisorService {
+    + ask(q : AIQueryDTO) : AIResponseDTO
+  }
+
+  class AuthServiceImpl
+  class IncomeServiceImpl
+  class ExpenseServiceImpl
+  class DashboardServiceImpl
+  class TuitionServiceImpl
+  class ExpensePredictionServiceImpl
+  class WhatIfSimulationServiceImpl
+  class AIAdvisorServiceImpl
+}
+
+AuthServiceImpl                 ..|> AuthService
+IncomeServiceImpl               ..|> IncomeService
+ExpenseServiceImpl              ..|> ExpenseService
+DashboardServiceImpl            ..|> DashboardService
+TuitionServiceImpl              ..|> TuitionService
+ExpensePredictionServiceImpl    ..|> ExpensePredictionService
+WhatIfSimulationServiceImpl     ..|> WhatIfSimulationService
+AIAdvisorServiceImpl            ..|> AIAdvisorService
+
+AuthServiceImpl              --> UserRepository
+AuthServiceImpl              --> JwtUtil
+AuthServiceImpl              --> PasswordEncoder
+IncomeServiceImpl            --> IncomeRepository
+IncomeServiceImpl            --> UserRepository
+ExpenseServiceImpl           --> ExpenseRepository
+ExpenseServiceImpl           --> UserRepository
+DashboardServiceImpl         --> IncomeRepository
+DashboardServiceImpl         --> ExpenseRepository
+DashboardServiceImpl         --> UserRepository
+TuitionServiceImpl           --> TuitionPlanRepository
+TuitionServiceImpl           --> DashboardService
+ExpensePredictionServiceImpl --> ExpenseRepository
+WhatIfSimulationServiceImpl  --> DashboardService
+AIAdvisorServiceImpl         --> DashboardService
+AIAdvisorServiceImpl         --> ExpensePredictionService
+
+' ============================================================
+' Controller Layer (REST)
+' ============================================================
+package "com.fms.controller" as ctrlPkg {
+  class AuthController <<@RestController>> {
+    + register(req : RegisterRequest) : AuthResponse
+    + login(req : LoginRequest) : AuthResponse
+  }
+  class IncomeController <<@RestController>> {
+    + list() : List<IncomeDTO>
+    + create(dto : IncomeDTO) : IncomeDTO
+    + update(id : Long, dto : IncomeDTO) : IncomeDTO
+    + delete(id : Long) : void
+  }
+  class ExpenseController <<@RestController>> {
+    + list() : List<ExpenseDTO>
+    + create(dto : ExpenseDTO) : ExpenseDTO
+    + update(id : Long, dto : ExpenseDTO) : ExpenseDTO
+    + delete(id : Long) : void
+  }
+  class DashboardController <<@RestController>> {
+    + summary() : DashboardSummaryDTO
+  }
+  class TuitionController <<@RestController>> {
+    + calculate(req : TuitionRequestDTO) : TuitionResultDTO
+  }
+  class PredictionController <<@RestController>> {
+    + predictExpenses() : PredictionResultDTO
+  }
+  class SimulationController <<@RestController>> {
+    + run(req : SimulationRequestDTO) : SimulationResultDTO
+  }
+  class AIAdvisorController <<@RestController>> {
+    + ask(q : AIQueryDTO) : AIResponseDTO
+  }
+}
+
+AuthController        --> AuthService
+IncomeController      --> IncomeService
+ExpenseController     --> ExpenseService
+DashboardController   --> DashboardService
+TuitionController     --> TuitionService
+PredictionController  --> ExpensePredictionService
+SimulationController  --> WhatIfSimulationService
+AIAdvisorController   --> AIAdvisorService
+
+' ============================================================
+' Configuration / Security
+' ============================================================
+package "com.fms.config" as cfgPkg {
+  class SecurityConfig <<@Configuration>> {
+    + securityFilterChain(http : HttpSecurity) : SecurityFilterChain
+    + passwordEncoder() : PasswordEncoder
+    + authenticationManager(cfg : AuthenticationConfiguration) : AuthenticationManager
+  }
+  class JwtAuthFilter <<OncePerRequestFilter>> {
+    - jwtUtil : JwtUtil
+    - userDetailsService : UserDetailsService
+    # doFilterInternal(req, res, chain) : void
+  }
+  class JwtUtil <<@Component>> {
+    - secret : String
+    - expirationMs : long
+    + generateToken(email : String) : String
+    + extractEmail(token : String) : String
+    + validateToken(token : String, email : String) : boolean
+  }
+  class CorsConfig <<@Configuration>> {
+    + corsFilter() : CorsFilter
+  }
+  class GlobalExceptionHandler <<@RestControllerAdvice>> {
+    + onValidation(e) : ResponseEntity
+    + onResponseStatus(e) : ResponseEntity
+    + onOther(e) : ResponseEntity
+  }
+  interface PasswordEncoder
+}
+
+SecurityConfig  --> JwtAuthFilter
+JwtAuthFilter   --> JwtUtil
+SecurityConfig  ..> PasswordEncoder
+AuthServiceImpl --> JwtUtil
+
+' ============================================================
+' Frontend (React) — logical view
+' ============================================================
+package "frontend/src (React 18)" as feRoot {
+  package "context" {
+    class AuthContext <<React Context>> {
+      + user : {email, firstName, lastName}
+      + token : String
+      + isAuthenticated : boolean
+      + login(data) : void
+      + logout() : void
+    }
+  }
+
+  package "api" {
+    class axiosInstance <<axios>> {
+      + baseURL : "http://localhost:8080/api"
+      + request interceptor : attach Bearer token
+      + response interceptor : 401 -> logout
+    }
+  }
+
+  package "services" {
+    class authService
+    class incomeService
+    class expenseService
+    class dashboardService
+    class tuitionService
+    class predictionService
+    class simulationService
+    class aiService
+  }
+
+  package "pages" {
+    class LoginPage
+    class RegisterPage
+    class DashboardPage
+    class IncomePage
+    class ExpensePage
+    class TuitionPlannerPage
+    class PredictionPage
+    class SimulationPage
+    class AIAdvisorPage
+  }
+
+  package "components" {
+    class Navbar
+    class ProtectedRoute
+    class SummaryCard
+    class BudgetChart
+    class IncomeForm
+    class ExpenseForm
+    class TuitionForm
+    class SimulationForm
+    class AIChat
+  }
+}
+
+authService       --> axiosInstance
+incomeService     --> axiosInstance
+expenseService    --> axiosInstance
+dashboardService  --> axiosInstance
+tuitionService    --> axiosInstance
+predictionService --> axiosInstance
+simulationService --> axiosInstance
+aiService         --> axiosInstance
+
+LoginPage          --> authService
+RegisterPage       --> authService
+DashboardPage      --> dashboardService
+IncomePage         --> incomeService
+ExpensePage        --> expenseService
+TuitionPlannerPage --> tuitionService
+PredictionPage     --> predictionService
+SimulationPage     --> simulationService
+AIAdvisorPage      --> aiService
+
+LoginPage          ..> AuthContext
+RegisterPage       ..> AuthContext
+ProtectedRoute     ..> AuthContext
+Navbar             ..> AuthContext
+
+DashboardPage      *-- SummaryCard
+DashboardPage      *-- BudgetChart
+IncomePage         *-- IncomeForm
+ExpensePage        *-- ExpenseForm
+TuitionPlannerPage *-- TuitionForm
+SimulationPage     *-- SimulationForm
+AIAdvisorPage      *-- AIChat
+
+' HTTP edge from frontend to backend
+axiosInstance ..> AuthController        : HTTP
+axiosInstance ..> IncomeController      : HTTP
+axiosInstance ..> ExpenseController     : HTTP
+axiosInstance ..> DashboardController   : HTTP
+axiosInstance ..> TuitionController     : HTTP
+axiosInstance ..> PredictionController  : HTTP
+axiosInstance ..> SimulationController  : HTTP
+axiosInstance ..> AIAdvisorController   : HTTP
+
+@enduml

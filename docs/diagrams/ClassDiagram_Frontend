@@ -1,0 +1,97 @@
+digraph {
+	bgcolor=white compound=true dpi=180 fontname=Helvetica fontsize=18 label="Financial Management System — Frontend Class Diagram (React 18 + Vite)\nCS 5394 Group 2 · Aakriti Dhakal · Agnes Jesionowska · Manoj Khanal" labeljust=c labelloc=t newrank=true nodesep=0.4 rankdir=TB ranksep=0.8 size="16,28!" splines=spline
+	node [fontname=Helvetica fontsize=12 shape=plain]
+	edge [arrowsize=0.8 fontname=Helvetica fontsize=10 penwidth=1.1]
+	subgraph cluster_ctx {
+		color="#2E7D32" fillcolor="#F1F8E9" fontname="Helvetica-Bold" fontsize=14 label=context style=filled
+		AuthContext [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#DCEDC8"><TR><TD BGCOLOR="#C5E1A5" ALIGN="CENTER"><I>&#171;React Context&#187;</I></TD></TR><TR><TD BGCOLOR="#DCEDC8" ALIGN="CENTER"><B>AuthContext</B></TD></TR><HR/><TR><TD ALIGN="LEFT">+ user : {email, firstName, lastName}</TD></TR><TR><TD ALIGN="LEFT">+ token : String</TD></TR><TR><TD ALIGN="LEFT">+ isAuthenticated : boolean</TD></TR><HR/><TR><TD ALIGN="LEFT">+ login(data) : void</TD></TR><TR><TD ALIGN="LEFT">+ logout() : void</TD></TR></TABLE>>]
+	}
+	subgraph cluster_api {
+		color="#2E7D32" fillcolor="#F1F8E9" fontname="Helvetica-Bold" fontsize=14 label=api style=filled
+		axiosInstance [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#DCEDC8"><TR><TD BGCOLOR="#C5E1A5" ALIGN="CENTER"><I>&#171;axios&#187;</I></TD></TR><TR><TD BGCOLOR="#DCEDC8" ALIGN="CENTER"><B>axiosInstance</B></TD></TR><HR/><TR><TD ALIGN="LEFT">+ baseURL : "/api"</TD></TR><TR><TD ALIGN="LEFT">+ request : attach Bearer</TD></TR><TR><TD ALIGN="LEFT">+ response : 401 → logout</TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR></TABLE>>]
+	}
+	subgraph cluster_svc {
+		color="#2E7D32" fillcolor="#F1F8E9" fontname="Helvetica-Bold" fontsize=14 label=services style=filled
+		authService [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#F1F8E9"><TR><TD BGCOLOR="#DCEDC8" ALIGN="CENTER"><I>&#171;service&#187;</I></TD></TR><TR><TD BGCOLOR="#F1F8E9" ALIGN="CENTER"><B>authService</B></TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR><HR/><TR><TD ALIGN="LEFT">+ register(payload)</TD></TR><TR><TD ALIGN="LEFT">+ login(payload)</TD></TR><TR><TD ALIGN="LEFT">+ logout()</TD></TR></TABLE>>]
+		incomeService [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#F1F8E9"><TR><TD BGCOLOR="#DCEDC8" ALIGN="CENTER"><I>&#171;service&#187;</I></TD></TR><TR><TD BGCOLOR="#F1F8E9" ALIGN="CENTER"><B>incomeService</B></TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR><HR/><TR><TD ALIGN="LEFT">+ listIncome()</TD></TR><TR><TD ALIGN="LEFT">+ createIncome(dto)</TD></TR><TR><TD ALIGN="LEFT">+ updateIncome(id,dto)</TD></TR><TR><TD ALIGN="LEFT">+ deleteIncome(id)</TD></TR></TABLE>>]
+		expenseService [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#F1F8E9"><TR><TD BGCOLOR="#DCEDC8" ALIGN="CENTER"><I>&#171;service&#187;</I></TD></TR><TR><TD BGCOLOR="#F1F8E9" ALIGN="CENTER"><B>expenseService</B></TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR><HR/><TR><TD ALIGN="LEFT">+ listExpense()</TD></TR><TR><TD ALIGN="LEFT">+ createExpense(dto)</TD></TR><TR><TD ALIGN="LEFT">+ updateExpense(id,dto)</TD></TR><TR><TD ALIGN="LEFT">+ deleteExpense(id)</TD></TR></TABLE>>]
+		dashboardService [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#F1F8E9"><TR><TD BGCOLOR="#DCEDC8" ALIGN="CENTER"><I>&#171;service&#187;</I></TD></TR><TR><TD BGCOLOR="#F1F8E9" ALIGN="CENTER"><B>dashboardService</B></TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR><HR/><TR><TD ALIGN="LEFT">+ getSummary()</TD></TR></TABLE>>]
+		tuitionService [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#F1F8E9"><TR><TD BGCOLOR="#DCEDC8" ALIGN="CENTER"><I>&#171;service&#187;</I></TD></TR><TR><TD BGCOLOR="#F1F8E9" ALIGN="CENTER"><B>tuitionService</B></TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR><HR/><TR><TD ALIGN="LEFT">+ calculate(dto)</TD></TR></TABLE>>]
+		predictionService [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#F1F8E9"><TR><TD BGCOLOR="#DCEDC8" ALIGN="CENTER"><I>&#171;service&#187;</I></TD></TR><TR><TD BGCOLOR="#F1F8E9" ALIGN="CENTER"><B>predictionService</B></TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR><HR/><TR><TD ALIGN="LEFT">+ getPrediction()</TD></TR></TABLE>>]
+		simulationService [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#F1F8E9"><TR><TD BGCOLOR="#DCEDC8" ALIGN="CENTER"><I>&#171;service&#187;</I></TD></TR><TR><TD BGCOLOR="#F1F8E9" ALIGN="CENTER"><B>simulationService</B></TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR><HR/><TR><TD ALIGN="LEFT">+ runSimulation(dto)</TD></TR></TABLE>>]
+		aiService [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#F1F8E9"><TR><TD BGCOLOR="#DCEDC8" ALIGN="CENTER"><I>&#171;service&#187;</I></TD></TR><TR><TD BGCOLOR="#F1F8E9" ALIGN="CENTER"><B>aiService</B></TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR><HR/><TR><TD ALIGN="LEFT">+ ask(question)</TD></TR></TABLE>>]
+	}
+	subgraph cluster_pages {
+		color="#558B2F" fillcolor="#F9FBE7" fontname="Helvetica-Bold" fontsize=14 label=pages style=filled
+		LoginPage [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#F9FBE7"><TR><TD BGCOLOR="#F0F4C3" ALIGN="CENTER"><I>&#171;page&#187;</I></TD></TR><TR><TD BGCOLOR="#F9FBE7" ALIGN="CENTER"><B>LoginPage</B></TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR></TABLE>>]
+		RegisterPage [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#F9FBE7"><TR><TD BGCOLOR="#F0F4C3" ALIGN="CENTER"><I>&#171;page&#187;</I></TD></TR><TR><TD BGCOLOR="#F9FBE7" ALIGN="CENTER"><B>RegisterPage</B></TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR></TABLE>>]
+		DashboardPage [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#F9FBE7"><TR><TD BGCOLOR="#F0F4C3" ALIGN="CENTER"><I>&#171;page&#187;</I></TD></TR><TR><TD BGCOLOR="#F9FBE7" ALIGN="CENTER"><B>DashboardPage</B></TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR></TABLE>>]
+		IncomePage [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#F9FBE7"><TR><TD BGCOLOR="#F0F4C3" ALIGN="CENTER"><I>&#171;page&#187;</I></TD></TR><TR><TD BGCOLOR="#F9FBE7" ALIGN="CENTER"><B>IncomePage</B></TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR></TABLE>>]
+		ExpensePage [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#F9FBE7"><TR><TD BGCOLOR="#F0F4C3" ALIGN="CENTER"><I>&#171;page&#187;</I></TD></TR><TR><TD BGCOLOR="#F9FBE7" ALIGN="CENTER"><B>ExpensePage</B></TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR></TABLE>>]
+		TuitionPlannerPage [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#F9FBE7"><TR><TD BGCOLOR="#F0F4C3" ALIGN="CENTER"><I>&#171;page&#187;</I></TD></TR><TR><TD BGCOLOR="#F9FBE7" ALIGN="CENTER"><B>TuitionPlannerPage</B></TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR></TABLE>>]
+		PredictionPage [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#F9FBE7"><TR><TD BGCOLOR="#F0F4C3" ALIGN="CENTER"><I>&#171;page&#187;</I></TD></TR><TR><TD BGCOLOR="#F9FBE7" ALIGN="CENTER"><B>PredictionPage</B></TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR></TABLE>>]
+		SimulationPage [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#F9FBE7"><TR><TD BGCOLOR="#F0F4C3" ALIGN="CENTER"><I>&#171;page&#187;</I></TD></TR><TR><TD BGCOLOR="#F9FBE7" ALIGN="CENTER"><B>SimulationPage</B></TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR></TABLE>>]
+		AIAdvisorPage [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#F9FBE7"><TR><TD BGCOLOR="#F0F4C3" ALIGN="CENTER"><I>&#171;page&#187;</I></TD></TR><TR><TD BGCOLOR="#F9FBE7" ALIGN="CENTER"><B>AIAdvisorPage</B></TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR></TABLE>>]
+	}
+	subgraph cluster_comp {
+		color="#558B2F" fillcolor="#F9FBE7" fontname="Helvetica-Bold" fontsize=14 label=components style=filled
+		Navbar [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#FFFDE7"><TR><TD BGCOLOR="#FFF9C4" ALIGN="CENTER"><I>&#171;component&#187;</I></TD></TR><TR><TD BGCOLOR="#FFFDE7" ALIGN="CENTER"><B>Navbar</B></TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR></TABLE>>]
+		ProtectedRoute [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#FFFDE7"><TR><TD BGCOLOR="#FFF9C4" ALIGN="CENTER"><I>&#171;component&#187;</I></TD></TR><TR><TD BGCOLOR="#FFFDE7" ALIGN="CENTER"><B>ProtectedRoute</B></TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR></TABLE>>]
+		SummaryCard [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#FFFDE7"><TR><TD BGCOLOR="#FFF9C4" ALIGN="CENTER"><I>&#171;component&#187;</I></TD></TR><TR><TD BGCOLOR="#FFFDE7" ALIGN="CENTER"><B>SummaryCard</B></TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR></TABLE>>]
+		BudgetChart [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#FFFDE7"><TR><TD BGCOLOR="#FFF9C4" ALIGN="CENTER"><I>&#171;component&#187;</I></TD></TR><TR><TD BGCOLOR="#FFFDE7" ALIGN="CENTER"><B>BudgetChart</B></TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR></TABLE>>]
+		IncomeForm [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#FFFDE7"><TR><TD BGCOLOR="#FFF9C4" ALIGN="CENTER"><I>&#171;component&#187;</I></TD></TR><TR><TD BGCOLOR="#FFFDE7" ALIGN="CENTER"><B>IncomeForm</B></TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR></TABLE>>]
+		ExpenseForm [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#FFFDE7"><TR><TD BGCOLOR="#FFF9C4" ALIGN="CENTER"><I>&#171;component&#187;</I></TD></TR><TR><TD BGCOLOR="#FFFDE7" ALIGN="CENTER"><B>ExpenseForm</B></TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR></TABLE>>]
+		TuitionForm [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#FFFDE7"><TR><TD BGCOLOR="#FFF9C4" ALIGN="CENTER"><I>&#171;component&#187;</I></TD></TR><TR><TD BGCOLOR="#FFFDE7" ALIGN="CENTER"><B>TuitionForm</B></TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR></TABLE>>]
+		SimulationForm [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#FFFDE7"><TR><TD BGCOLOR="#FFF9C4" ALIGN="CENTER"><I>&#171;component&#187;</I></TD></TR><TR><TD BGCOLOR="#FFFDE7" ALIGN="CENTER"><B>SimulationForm</B></TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR></TABLE>>]
+		AIChat [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#FFFDE7"><TR><TD BGCOLOR="#FFF9C4" ALIGN="CENTER"><I>&#171;component&#187;</I></TD></TR><TR><TD BGCOLOR="#FFFDE7" ALIGN="CENTER"><B>AIChat</B></TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR><HR/><TR><TD ALIGN="LEFT"> </TD></TR></TABLE>>]
+	}
+	authService -> axiosInstance [arrowhead=vee color="#2E7D32"]
+	incomeService -> axiosInstance [arrowhead=vee color="#2E7D32"]
+	expenseService -> axiosInstance [arrowhead=vee color="#2E7D32"]
+	dashboardService -> axiosInstance [arrowhead=vee color="#2E7D32"]
+	tuitionService -> axiosInstance [arrowhead=vee color="#2E7D32"]
+	predictionService -> axiosInstance [arrowhead=vee color="#2E7D32"]
+	simulationService -> axiosInstance [arrowhead=vee color="#2E7D32"]
+	aiService -> axiosInstance [arrowhead=vee color="#2E7D32"]
+	LoginPage -> authService [arrowhead=vee color="#2E7D32"]
+	RegisterPage -> authService [arrowhead=vee color="#2E7D32"]
+	DashboardPage -> dashboardService [arrowhead=vee color="#2E7D32"]
+	IncomePage -> incomeService [arrowhead=vee color="#2E7D32"]
+	ExpensePage -> expenseService [arrowhead=vee color="#2E7D32"]
+	TuitionPlannerPage -> tuitionService [arrowhead=vee color="#2E7D32"]
+	PredictionPage -> predictionService [arrowhead=vee color="#2E7D32"]
+	SimulationPage -> simulationService [arrowhead=vee color="#2E7D32"]
+	AIAdvisorPage -> aiService [arrowhead=vee color="#2E7D32"]
+	LoginPage -> AuthContext [arrowhead=open color="#2E7D32" style=dashed]
+	RegisterPage -> AuthContext [arrowhead=open color="#2E7D32" style=dashed]
+	ProtectedRoute -> AuthContext [arrowhead=open color="#2E7D32" style=dashed]
+	Navbar -> AuthContext [arrowhead=open color="#2E7D32" style=dashed]
+	DashboardPage -> SummaryCard [arrowtail=odiamond color="#2E7D32" dir=back]
+	DashboardPage -> BudgetChart [arrowtail=odiamond color="#2E7D32" dir=back]
+	IncomePage -> IncomeForm [arrowtail=odiamond color="#2E7D32" dir=back]
+	ExpensePage -> ExpenseForm [arrowtail=odiamond color="#2E7D32" dir=back]
+	TuitionPlannerPage -> TuitionForm [arrowtail=odiamond color="#2E7D32" dir=back]
+	SimulationPage -> SimulationForm [arrowtail=odiamond color="#2E7D32" dir=back]
+	AIAdvisorPage -> AIChat [arrowtail=odiamond color="#2E7D32" dir=back]
+	authService -> dashboardService [minlen=1 style=invis weight=40]
+	incomeService -> tuitionService [minlen=1 style=invis weight=40]
+	expenseService -> predictionService [minlen=1 style=invis weight=40]
+	dashboardService -> simulationService [minlen=1 style=invis weight=40]
+	tuitionService -> aiService [minlen=1 style=invis weight=40]
+	LoginPage -> IncomePage [minlen=1 style=invis weight=40]
+	RegisterPage -> ExpensePage [minlen=1 style=invis weight=40]
+	DashboardPage -> TuitionPlannerPage [minlen=1 style=invis weight=40]
+	IncomePage -> PredictionPage [minlen=1 style=invis weight=40]
+	ExpensePage -> SimulationPage [minlen=1 style=invis weight=40]
+	TuitionPlannerPage -> AIAdvisorPage [minlen=1 style=invis weight=40]
+	Navbar -> BudgetChart [minlen=1 style=invis weight=40]
+	ProtectedRoute -> IncomeForm [minlen=1 style=invis weight=40]
+	SummaryCard -> ExpenseForm [minlen=1 style=invis weight=40]
+	BudgetChart -> TuitionForm [minlen=1 style=invis weight=40]
+	IncomeForm -> SimulationForm [minlen=1 style=invis weight=40]
+	ExpenseForm -> AIChat [minlen=1 style=invis weight=40]
+	AuthContext -> axiosInstance [minlen=2 style=invis weight=500]
+	axiosInstance -> authService [minlen=2 style=invis weight=500]
+	aiService -> LoginPage [minlen=2 style=invis weight=500]
+	AIAdvisorPage -> Navbar [minlen=2 style=invis weight=500]
+}
