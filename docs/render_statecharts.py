@@ -7,13 +7,6 @@ Produces FIVE statecharts, one per core workflow:
   S4  WhatIfSimulation.png              — Scenario configuration + projection
   S5  AIAdvisorSession.png              — Ask → OpenAI call → Response display
 
-All charts use UML-standard notation:
-    ● initial state       (filled small circle)
-    ◉ final state         (double circle, inner filled)
-    rounded rectangles    for named states (optional /entry, /do, /exit lines)
-    transitions labelled  "trigger [guard] / action"
-
-Same Graphviz DOT stack as the class diagrams.
 """
 from pathlib import Path
 from graphviz import Digraph
@@ -98,7 +91,7 @@ def t(g, src, dst, trigger="", guard="", action="", color="#37474F",
 
 
 # =============================================================================
-# S1 — AUTHENTICATION STATECHART  (SRS §3.1.1 + §3.1.2)
+# S1 — AUTHENTICATION STATECHART  
 # =============================================================================
 def build_authentication():
     g = base_graph(
@@ -174,7 +167,7 @@ def build_authentication():
 
 
 # =============================================================================
-# S2 — EXPENSE / INCOME RECORD LIFECYCLE  (SRS §3.1.3 + §3.1.4)
+# S2 — EXPENSE / INCOME RECORD LIFECYCLE  
 # =============================================================================
 def build_record_lifecycle():
     g = base_graph(
@@ -243,7 +236,7 @@ def build_record_lifecycle():
 
 
 # =============================================================================
-# S3 — TUITION PLANNING  (SRS §3.1.5)
+# S3 — TUITION PLANNING 
 # =============================================================================
 def build_tuition_planning():
     g = base_graph(
@@ -302,7 +295,7 @@ def build_tuition_planning():
 
 
 # =============================================================================
-# S4 — WHAT-IF SIMULATION  (SRS §3.1.8)
+# S4 — WHAT-IF SIMULATION 
 # =============================================================================
 def build_simulation():
     g = base_graph(
@@ -374,7 +367,7 @@ def build_simulation():
 
 
 # =============================================================================
-# S5 — AI ADVISOR SESSION  (SRS §3.1.7)
+# S5 — AI ADVISOR SESSION  
 # =============================================================================
 def build_ai_advisor():
     g = base_graph(
