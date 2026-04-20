@@ -1,0 +1,23 @@
+digraph {
+	bgcolor=white compound=true dpi=200 fontname=Helvetica fontsize=18 label="Statechart S3 — Tuition Planning Calculation\nSRS §3.1.5 Tuition Planning" labeljust=c labelloc=t newrank=true nodesep=0.55 pad=0.4 rankdir=TB ranksep=0.9 size="14,10!" splines=spline
+	node [fontname=Helvetica fontsize=12]
+	edge [arrowsize=0.9 fontname=Helvetica fontsize=10 penwidth=1.2]
+	s3_start [label="" color=black fillcolor=black fixedsize=true height=0.28 shape=circle style=filled width=0.28]
+	s3_idle [label=<<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4"><TR><TD ALIGN="CENTER"><B>Idle</B></TD></TR><HR/><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="10">entry / navigate to TuitionPlannerPage</FONT></TD></TR></TABLE>> color="#455A64" fillcolor="#ECEFF1" penwidth=1.6 shape=rectangle style="rounded,filled"]
+	s3_input [label=<<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4"><TR><TD ALIGN="CENTER"><B>Entering Inputs</B></TD></TR><HR/><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="10">entry / render TuitionForm</FONT></TD></TR><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="10">do / collect tuitionPerCourse,</FONT></TD></TR><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="10">     numberOfCourses, scholarshipAmount</FONT></TD></TR></TABLE>> color="#E65100" fillcolor="#FFF3E0" penwidth=1.6 shape=rectangle style="rounded,filled"]
+	s3_valid [label=<<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4"><TR><TD ALIGN="CENTER"><B>Validating</B></TD></TR><HR/><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="10">do / Bean Validation</FONT></TD></TR><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="10">  @DecimalMin("0.01") tuitionPerCourse</FONT></TD></TR><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="10">  @Min(1) numberOfCourses</FONT></TD></TR></TABLE>> color="#F9A825" fillcolor="#FFFDE7" penwidth=1.6 shape=rectangle style="rounded,filled"]
+	s3_calc [label=<<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4"><TR><TD ALIGN="CENTER"><B>Calculating</B></TD></TR><HR/><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="10">do / POST /api/tuition/calculate</FONT></TD></TR><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="10">  grossTuition = per × number</FONT></TD></TR><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="10">  netTuition = gross − scholarship</FONT></TD></TR><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="10">  persist TuitionPlan</FONT></TD></TR></TABLE>> color="#1565C0" fillcolor="#E3F2FD" penwidth=1.6 shape=rectangle style="rounded,filled"]
+	s3_display [label=<<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4"><TR><TD ALIGN="CENTER"><B>Displaying Result</B></TD></TR><HR/><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="10">entry / render TuitionResultDTO</FONT></TD></TR><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="10">  grossTuition, netTuition</FONT></TD></TR><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="10">do / wait for user review</FONT></TD></TR></TABLE>> color="#2E7D32" fillcolor="#E8F5E9" penwidth=1.6 shape=rectangle style="rounded,filled"]
+	s3_adjust [label=<<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4"><TR><TD ALIGN="CENTER"><B>Adjusting Inputs</B></TD></TR><HR/><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="10">do / modify numberOfCourses / scholarshipAmount</FONT></TD></TR></TABLE>> color="#E65100" fillcolor="#FFF3E0" penwidth=1.6 shape=rectangle style="rounded,filled"]
+	s3_end [label="" color=black fillcolor=black fixedsize=true height=0.32 penwidth=1.4 shape=doublecircle style=filled width=0.32]
+	s3_start -> s3_idle [label="" arrowhead=vee color="#37474F" fontcolor="#37474F" style=solid]
+	s3_idle -> s3_input [label="visit page" arrowhead=vee color="#37474F" fontcolor="#37474F" style=solid]
+	s3_input -> s3_valid [label="click Calculate" arrowhead=vee color="#37474F" fontcolor="#37474F" style=solid]
+	s3_valid -> s3_input [label="400 Bad Request [invalid numbers]" arrowhead=vee color="#C62828" fontcolor="#C62828" style=dashed]
+	s3_valid -> s3_calc [label="pass / TuitionService.calculate(email, req)" arrowhead=vee color="#2E7D32" fontcolor="#2E7D32" style=solid]
+	s3_calc -> s3_display [label="200 OK" arrowhead=vee color="#2E7D32" fontcolor="#2E7D32" style=solid]
+	s3_calc -> s3_input [label="500 Error" arrowhead=vee color="#C62828" fontcolor="#C62828" style=dashed]
+	s3_display -> s3_adjust [label="click Recalculate" arrowhead=vee color="#37474F" fontcolor="#37474F" style=solid]
+	s3_adjust -> s3_valid [label="click Calculate" arrowhead=vee color="#37474F" fontcolor="#37474F" style=solid]
+	s3_display -> s3_end [label="leave page" arrowhead=vee color="#455A64" fontcolor="#455A64" style=solid]
+}
