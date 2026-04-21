@@ -10,7 +10,11 @@ public class TuitionResultDTO {
     private BigDecimal tuitionPerCourse;
     private Integer numberOfCourses;
     private BigDecimal scholarshipAmount;
-    private BigDecimal grossTuition;
-    private BigDecimal netTuition;
-    // TODO: Add payment schedule, per-month breakdown, remaining budget after tuition
+    private BigDecimal totalTuition;
+    private BigDecimal remainingCost;
+    private BigDecimal currentSavings;
+    private BigDecimal monthlySurplus;
+    private Boolean isAffordable;
+    private Integer estimatedMonthsToSave;
+    private String affordabilityMessage;
 }

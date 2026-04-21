@@ -17,6 +17,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Default implementation of {@link DashboardService} that aggregates financial
+ * data into a summary suitable for the main dashboard view.
+ *
+ * <p>The summary includes all-time income and expense totals, the resulting net
+ * balance, the five most recent records in each category, and a breakdown of
+ * income vs. expenses for the last six calendar months.</p>
+ */
 @Service
 @RequiredArgsConstructor
 public class DashboardServiceImpl implements DashboardService {
@@ -25,6 +33,16 @@ public class DashboardServiceImpl implements DashboardService {
     private final IncomeRepository incomeRepository;
     private final ExpenseRepository expenseRepository;
 
+    /**
+     * Builds a complete dashboard summary for the given user.
+     *
+     * <p>Monthly data covers the current month and the five months preceding it,
+     * with each month labelled using a three-letter abbreviation (e.g. "Jan").</p>
+     *
+     * @param userEmail the authenticated user's email
+     * @return a {@link DashboardSummaryDTO} with totals, recent records, and monthly data
+     * @throws RuntimeException if no user is found for the given email
+     */
     @Override
     public DashboardSummaryDTO getSummary(String userEmail) {
         User user = userRepository.findByEmail(userEmail)
