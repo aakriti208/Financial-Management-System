@@ -11,6 +11,14 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Default implementation of {@link ExpenseService} providing CRUD operations
+ * for a user's expense records.
+ *
+ * <p>Expenses are classified by {@link com.fms.model.ExpenseType} (FIXED or VARIABLE)
+ * and {@link com.fms.model.Necessity} (ESSENTIAL or DISCRETIONARY) to support
+ * budget analysis and prediction features.</p>
+ */
 @Service
 @RequiredArgsConstructor
 public class ExpenseServiceImpl implements ExpenseService {
@@ -18,6 +26,13 @@ public class ExpenseServiceImpl implements ExpenseService {
     private final ExpenseRepository expenseRepository;
     private final UserRepository userRepository;
 
+    /**
+     * Returns all expense records for the given user, ordered by date descending.
+     *
+     * @param userEmail the authenticated user's email
+     * @return list of {@link ExpenseDTO}s, newest first; empty list if none exist
+     * @throws RuntimeException if no user is found for the given email
+     */
     @Override
     public List<ExpenseDTO> getAllByUser(String userEmail) {
         User user = getUser(userEmail);
@@ -25,6 +40,14 @@ public class ExpenseServiceImpl implements ExpenseService {
                 .stream().map(this::toDTO).collect(Collectors.toList());
     }
 
+    /**
+     * Creates and persists a new expense record for the given user.
+     *
+     * @param userEmail the authenticated user's email
+     * @param dto       expense data to save
+     * @return the saved record as an {@link ExpenseDTO} with its generated id
+     * @throws RuntimeException if no user is found for the given email
+     */
     @Override
     public ExpenseDTO add(String userEmail, ExpenseDTO dto) {
         User user = getUser(userEmail);
@@ -39,6 +62,14 @@ public class ExpenseServiceImpl implements ExpenseService {
         return toDTO(expenseRepository.save(expense));
     }
 
+    /**
+     * Updates an existing expense record with the provided data.
+     *
+     * @param id  the id of the expense record to update
+     * @param dto new field values to apply
+     * @return the updated record as an {@link ExpenseDTO}
+     * @throws RuntimeException if no expense record exists with the given id
+     */
     @Override
     public ExpenseDTO update(Long id, ExpenseDTO dto) {
         Expense expense = expenseRepository.findById(id)
@@ -52,6 +83,12 @@ public class ExpenseServiceImpl implements ExpenseService {
         return toDTO(expenseRepository.save(expense));
     }
 
+    /**
+     * Deletes the expense record with the given id.
+     *
+     * @param id the id of the expense record to delete
+     * @throws RuntimeException if no expense record exists with the given id
+     */
     @Override
     public void delete(Long id) {
         if (!expenseRepository.existsById(id)) {
