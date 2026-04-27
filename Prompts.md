@@ -9,12 +9,11 @@
 
 ## Authoring Conventions (applied to every prompt below)
 
->
-> 1. **Sandwich Method** — the most critical requirement is repeated at the top *and* the bottom of the prompt.
+> 1. **Sandwich Method** — the most critical requirement is repeated at the top _and_ the bottom of the prompt.
 > 2. **Attention Anchoring** — `MANDATORY`, `CRITICAL`, and `DO NOT` directives are placed inline at the exact step they govern.
 > 3. **Visual Emphasis** — **bold text**, `inline code`, and fenced code blocks separate instructions from filler.
 > 4. **Clear Delimiters** — every prompt uses `###` sub-headings and triple-backtick fences so the LLM can parse sections unambiguously.
-> 5. **Selective Context** — each prompt carries *only* the context needed for its one component (entity shapes, sibling filenames, DTO names) — never the entire codebase.
+> 5. **Selective Context** — each prompt carries _only_ the context needed for its one component (entity shapes, sibling filenames, DTO names) — never the entire codebase.
 
 ---
 
@@ -346,9 +345,7 @@ If no data: return zeros and empty lists (NEVER null).
 ## P10. Tuition & Course Planner
 
 > **CRITICAL:** Affordability formula **MUST** be:
-> `totalTuition = tuitionPerCourse × numberOfCourses`
-> `netTuition = totalTuition − scholarshipAmount`
-> `affordable = (currentSavings + projectedSurplus × monthsUntilDue) ≥ netTuition`
+> `totalTuition = tuitionPerCourse × numberOfCourses` > `netTuition = totalTuition − scholarshipAmount` > `affordable = (currentSavings + projectedSurplus × monthsUntilDue) ≥ netTuition`
 > SRS §3.1.6.
 
 ### Prompt
@@ -775,39 +772,6 @@ Toast/banner on success AND failure.
 
 ---
 
-## P24. Pages — Tuition / Prediction / Simulation / AI Advisor
-
-### Prompt
-
-```text
-Generate four page components, each a single form + result panel:
-
-### TuitionPlannerPage.jsx
-Form: tuitionPerCourse, numberOfCourses, scholarshipAmount, monthsUntilDue.
-On submit -> tuitionService.calculate(dto). Show: totalTuition, netTuition, projectedSavings,
-affordable (badge green/red), message.
-
-### PredictionPage.jsx
-No form. On mount -> predictionService.getPrediction(). Show: predictedNextMonth (big number),
-monthsUsed, Recharts LineChart of history.
-If 422 -> "Add at least 3 months of expenses to unlock predictions."
-
-### SimulationPage.jsx
-Form: hypotheticalMonthlyIncome, hypotheticalMonthlyExpenses, projectionMonths.
-On submit -> simulationService.runSimulation(dto). Show: verdict badge, endingBalance, LineChart of timeline.
-
-### AIAdvisorPage.jsx
-Chat UI. Local message list [{role:"user"|"assistant", text}].
-Input + send. On send -> aiService.ask(question). Append assistant reply.
-Show list of "dataPointsUsed" under each assistant reply.
-Empty state suggestions: "Can I afford 4 courses next semester?", "Where am I overspending?".
-
-### MANDATORY
-Every page has loading + error states. DO NOT block the UI thread — all calls are async/await.
-```
-
----
-
 ## P25. Reusable Components
 
 ### Prompt
@@ -834,8 +798,6 @@ Controlled inputs; submit calls props.onSubmit(dto); reset on success.
 
 ### TuitionForm.jsx / SimulationForm.jsx  — same pattern.
 
-### AIChat.jsx  (props: messages, onSend, loading)
-Scrollable message list + input + send. Assistant bubbles left, user bubbles right.
 
 ### MANDATORY
 Every form exposes an onCancel to reset state. NO component calls axios directly — go through services.
@@ -894,4 +856,4 @@ Every feature MUST end with the literal line "PASS / FAIL: ___".
 
 ---
 
-*End of Prompts.md — Financial Management System, CS 5394 Group 2.*
+_End of Prompts.md — Financial Management System, CS 5394 Group 2._
