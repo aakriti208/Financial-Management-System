@@ -42,6 +42,15 @@ export default {
         card: '0 1px 3px 0 rgb(0 0 0 / 0.08), 0 1px 2px -1px rgb(0 0 0 / 0.08)',
         'card-hover': '0 4px 12px 0 rgb(0 0 0 / 0.12)',
       },
+      keyframes: {
+        'chat-pop': {
+          '0%': { opacity: '0', transform: 'translateY(12px) scale(0.97)' },
+          '100%': { opacity: '1', transform: 'translateY(0) scale(1)' },
+        },
+      },
+      animation: {
+        'chat-pop': 'chat-pop 0.18s ease-out forwards',
+      },
     },
   },
   plugins: [],

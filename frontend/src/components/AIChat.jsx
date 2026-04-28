@@ -1,70 +1,128 @@
-// TODO: Maintain messages state: array of { role: 'user'|'ai', text: string }
-// TODO: On user submit, append user message and call aiService.askQuestion(text)
-// TODO: Append AI response to messages on success
-// TODO: Show loading spinner while awaiting response
-// TODO: Auto-scroll chat window to bottom on new message
-// TODO: Disable input while request is in flight
+import { useState, useEffect, useRef } from 'react'
+import { askQuestion } from '../services/aiService'
 
-import { useState } from 'react'
+const SUGGESTIONS = [
+  'Why am I spending so much this month?',
+  'How can I reduce my expenses?',
+  'Am I saving enough from my income?',
+  'What are my biggest expense categories?',
+]
 
-function AIChat() {
+function AIChat({ className = 'h-[620px]' }) {
   const [messages, setMessages] = useState([])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
+  const bottomRef = useRef(null)
 
-  const handleSend = async () => {
-    if (!input.trim()) return
-    // TODO: Append { role: 'user', text: input } to messages
-    // TODO: setLoading(true)
-    // TODO: const response = await aiService.askQuestion(input)
-    // TODO: Append { role: 'ai', text: response.answer } to messages
-    // TODO: setLoading(false)
-    // TODO: setInput('')
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [messages, loading])
+
+  const handleSend = async (text) => {
+    const question = (text ?? input).trim()
+    if (!question || loading) return
+
+    setInput('')
+    setError(null)
+    setMessages(prev => [...prev, { role: 'user', text: question }])
+    setLoading(true)
+
+    try {
+      const response = await askQuestion(question)
+      setMessages(prev => [...prev, { role: 'ai', text: response.answer }])
+    } catch {
+      setError('Failed to get a response. Please check your connection and try again.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
-    <div className="bg-white rounded-lg shadow flex flex-col h-[600px]">
-      {/* Chat messages area */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-3">
-        {messages.length === 0 && (
-          <p className="text-gray-400 text-center mt-8">
-            Ask me anything about your finances!
-          </p>
+    <div className={`card flex flex-col ${className}`}>
+      {/* Messages */}
+      <div className="flex-1 overflow-y-auto px-5 py-4 space-y-4">
+        {messages.length === 0 && !loading && (
+          <div className="flex flex-col items-center justify-center h-full text-center gap-4">
+            <div className="w-12 h-12 rounded-full bg-purple-50 flex items-center justify-center text-xl">
+              ✦
+            </div>
+            <div>
+              <p className="text-sm font-medium text-slate-600">Ask about your finances</p>
+              <p className="text-xs text-slate-400 mt-0.5">Powered by your real expense and income data</p>
+            </div>
+            <div className="flex flex-col gap-2 w-full max-w-sm mt-2">
+              {SUGGESTIONS.map((s, i) => (
+                <button
+                  key={i}
+                  onClick={() => handleSend(s)}
+                  className="text-left text-xs text-slate-500 bg-slate-50 hover:bg-slate-100 border border-slate-100 rounded-lg px-4 py-2.5 transition-colors"
+                >
+                  {s}
+                </button>
+              ))}
+            </div>
+          </div>
         )}
+
         {messages.map((msg, idx) => (
-          <div
-            key={idx}
-            className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
-          >
+          <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+            {msg.role === 'ai' && (
+              <div className="w-6 h-6 rounded-full bg-purple-100 flex items-center justify-center text-xs text-purple-600 mr-2 mt-0.5 flex-shrink-0">
+                ✦
+              </div>
+            )}
             <div
-              className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg text-sm ${
+              className={`max-w-[75%] px-4 py-2.5 rounded-2xl text-sm leading-relaxed ${
                 msg.role === 'user'
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-100 text-gray-800'
+                  ? 'bg-[#0f2035] text-white rounded-tr-sm'
+                  : 'bg-slate-100 text-slate-700 rounded-tl-sm'
               }`}
             >
               {msg.text}
             </div>
           </div>
         ))}
-        {/* TODO: Show loading indicator when loading === true */}
+
+        {loading && (
+          <div className="flex justify-start">
+            <div className="w-6 h-6 rounded-full bg-purple-100 flex items-center justify-center text-xs text-purple-600 mr-2 mt-0.5 flex-shrink-0">
+              ✦
+            </div>
+            <div className="bg-slate-100 px-4 py-3 rounded-2xl rounded-tl-sm">
+              <div className="flex gap-1">
+                <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+              </div>
+            </div>
+          </div>
+        )}
+
+        {error && (
+          <div className="mx-auto max-w-sm px-4 py-2.5 bg-rose-50 border border-rose-100 rounded-lg text-xs text-rose-600 text-center">
+            {error}
+          </div>
+        )}
+
+        <div ref={bottomRef} />
       </div>
 
-      {/* Input area */}
-      <div className="border-t p-4 flex gap-2">
+      {/* Input */}
+      <div className="border-t border-slate-100 px-4 py-3 flex gap-2">
         <input
           type="text"
           value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+          onChange={e => setInput(e.target.value)}
+          onKeyDown={e => e.key === 'Enter' && handleSend()}
           placeholder="Ask a financial question..."
-          className="flex-1 border rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-200 focus:border-purple-300 transition-colors"
           disabled={loading}
         />
         <button
-          onClick={handleSend}
-          disabled={loading}
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
+          onClick={() => handleSend()}
+          disabled={loading || !input.trim()}
+          className="px-4 py-2 bg-[#0f2035] text-white text-sm font-medium rounded-xl hover:bg-[#1a3050] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
         >
           Send
         </button>

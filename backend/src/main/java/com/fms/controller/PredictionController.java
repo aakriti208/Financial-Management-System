@@ -5,7 +5,6 @@ import com.fms.service.ExpensePredictionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,9 +19,8 @@ public class PredictionController {
     // GET /api/prediction/expenses
     @GetMapping("/expenses")
     public ResponseEntity<List<ExpenseDTO>> predictExpenses(
-            @AuthenticationPrincipal UserDetails userDetails) {
-        // TODO: Call predictionService.predictNextMonthExpenses(userDetails.getUsername())
-        // TODO: Return ResponseEntity.ok(predictions)
-        return null;
+            @AuthenticationPrincipal String email) {
+        List<ExpenseDTO> predictions = predictionService.predictNextMonthExpenses(email);
+        return ResponseEntity.ok(predictions);
     }
 }

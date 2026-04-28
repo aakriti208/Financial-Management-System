@@ -7,7 +7,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,10 +19,9 @@ public class AIAdvisorController {
     // POST /api/ai/ask
     @PostMapping("/ask")
     public ResponseEntity<AIResponseDTO> ask(
-            @AuthenticationPrincipal UserDetails userDetails,
+            @AuthenticationPrincipal String email,
             @Valid @RequestBody AIQueryDTO query) {
-        // TODO: Call aiAdvisorService.ask(userDetails.getUsername(), query)
-        // TODO: Return ResponseEntity.ok(response)
-        return null;
+        AIResponseDTO response = aiAdvisorService.ask(email, query);
+        return ResponseEntity.ok(response);
     }
 }

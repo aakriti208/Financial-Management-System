@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+// EmbeddingService is injected for async vector indexing on save/update
+
 /**
  * Default implementation of {@link ExpenseService} providing CRUD operations
  * for a user's expense records.
@@ -25,6 +27,7 @@ public class ExpenseServiceImpl implements ExpenseService {
 
     private final ExpenseRepository expenseRepository;
     private final UserRepository userRepository;
+    private final EmbeddingService embeddingService;
 
     /**
      * Returns all expense records for the given user, ordered by date descending.
@@ -59,7 +62,9 @@ public class ExpenseServiceImpl implements ExpenseService {
         expense.setNecessity(dto.getNecessity());
         expense.setDate(dto.getDate());
         expense.setDescription(dto.getDescription());
-        return toDTO(expenseRepository.save(expense));
+        ExpenseDTO saved = toDTO(expenseRepository.save(expense));
+        embeddingService.embedExpenseAsync(saved.getId(), toEmbeddingText(dto));
+        return saved;
     }
 
     /**
@@ -80,7 +85,9 @@ public class ExpenseServiceImpl implements ExpenseService {
         expense.setNecessity(dto.getNecessity());
         expense.setDate(dto.getDate());
         expense.setDescription(dto.getDescription());
-        return toDTO(expenseRepository.save(expense));
+        ExpenseDTO updated = toDTO(expenseRepository.save(expense));
+        embeddingService.embedExpenseAsync(updated.getId(), toEmbeddingText(dto));
+        return updated;
     }
 
     /**
@@ -107,6 +114,12 @@ public class ExpenseServiceImpl implements ExpenseService {
         dto.setDate(expense.getDate());
         dto.setDescription(expense.getDescription());
         return dto;
+    }
+
+    private String toEmbeddingText(ExpenseDTO dto) {
+        return String.format("Expense: %s $%s | Type: %s | Necessity: %s | Date: %s",
+                dto.getCategory(), dto.getAmount(),
+                dto.getExpenseType(), dto.getNecessity(), dto.getDate());
     }
 
     private User getUser(String email) {

@@ -1,20 +1,21 @@
-// TODO: Render AIChat component for financial question-and-answer
-// TODO: Allow user to type a question and display streaming or full AI response
-// TODO: Persist chat history in component state across the session
-
 import Navbar from '../components/Navbar'
 import AIChat from '../components/AIChat'
 
 function AIAdvisorPage() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-slate-50">
       <Navbar />
-      <main className="container mx-auto p-6">
-        <h1 className="text-3xl font-bold mb-6">AI Financial Advisor</h1>
-        <p className="text-gray-500 mb-4">
-          Ask questions about your finances and get personalized advice.
-        </p>
+      <main className="container mx-auto px-6 py-8 max-w-3xl">
+        <div className="mb-6">
+          <h1 className="text-2xl font-extrabold text-slate-800 tracking-tight">AI Financial Advisor</h1>
+          <p className="text-sm text-slate-400 mt-0.5 font-medium">
+            Personalized advice grounded in your actual financial records
+          </p>
+        </div>
         <AIChat />
+        <p className="text-xs text-slate-300 text-center mt-3">
+          Responses are based on your expense and income history via RAG retrieval.
+        </p>
       </main>
     </div>
   )
