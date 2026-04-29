@@ -1,6 +1,6 @@
 # Financial Management System (FMS)
 
-A web application for international students to track income, manage expenses, plan tuition costs, predict future spending, and get AI-powered financial advice.
+A specialized web application designed for international students to bridge the gap between daily spending and long-term academic financial planning.
 
 ---
 
