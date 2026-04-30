@@ -25,6 +25,7 @@ public class IncomeServiceImpl implements IncomeService {
 
     private final IncomeRepository incomeRepository;
     private final UserRepository userRepository;
+    private final EmbeddingService embeddingService;
 
     /**
      * Returns all income records for the given user, ordered by date descending.
@@ -58,7 +59,9 @@ public class IncomeServiceImpl implements IncomeService {
         income.setSourceType(dto.getSourceType());
         income.setDate(dto.getDate());
         income.setDescription(dto.getDescription());
-        return toDTO(incomeRepository.save(income));
+        IncomeDTO saved = toDTO(incomeRepository.save(income));
+        embeddingService.embedIncomeAsync(saved.getId(), toEmbeddingText(dto));
+        return saved;
     }
 
     /**
@@ -78,7 +81,9 @@ public class IncomeServiceImpl implements IncomeService {
         income.setSourceType(dto.getSourceType());
         income.setDate(dto.getDate());
         income.setDescription(dto.getDescription());
-        return toDTO(incomeRepository.save(income));
+        IncomeDTO updated = toDTO(incomeRepository.save(income));
+        embeddingService.embedIncomeAsync(updated.getId(), toEmbeddingText(dto));
+        return updated;
     }
 
     /**
@@ -104,6 +109,11 @@ public class IncomeServiceImpl implements IncomeService {
         dto.setDate(income.getDate());
         dto.setDescription(income.getDescription());
         return dto;
+    }
+
+    private String toEmbeddingText(IncomeDTO dto) {
+        return String.format("Income: %s $%s | Source Type: %s | Date: %s",
+                dto.getSource(), dto.getAmount(), dto.getSourceType(), dto.getDate());
     }
 
     private User getUser(String email) {

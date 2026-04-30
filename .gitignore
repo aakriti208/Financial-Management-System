@@ -1,0 +1,108 @@
+# ============================================================
+# Financial Management System — .gitignore
+# ============================================================
+
+# ============================================================
+# SECRETS — never commit these
+# ============================================================
+application-local.properties
+application-prod.properties
+*.env
+.env
+.env.*
+secrets.properties
+
+# ============================================================
+# Java / Maven (backend)
+# ============================================================
+backend/target/
+backend/*.class
+*.jar
+*.war
+*.ear
+*.nar
+*.class
+hs_err_pid*
+replay_pid*
+
+# Maven wrapper (keep mvnw if present, ignore wrapper jar)
+.mvn/wrapper/maven-wrapper.jar
+!.mvn/wrapper/maven-wrapper.properties
+
+# ============================================================
+# Spring Boot
+# ============================================================
+backend/src/main/resources/application-local.properties
+backend/src/main/resources/application-prod.properties
+
+# ============================================================
+# Node / React / Vite (frontend)
+# ============================================================
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+frontend/coverage/
+frontend/*.local
+
+# Vitest
+frontend/test-results/
+frontend/html/
+
+# ============================================================
+# IDE & Editor
+# ============================================================
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# Eclipse
+.project
+.classpath
+.settings/
+*.factorypath
+
+# NetBeans
+nbactions.xml
+
+# ============================================================
+# OS Files
+# ============================================================
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# ============================================================
+# Logs
+# ============================================================
+*.log
+logs/
+backend/logs/
+frontend/logs/
+/tmp/fms-backend.log
+
+# ============================================================
+# Database
+# ============================================================
+*.db
+*.sqlite
+*.h2.db
+
+# ============================================================
+# Misc
+# ============================================================
+*.tmp
+*.swp
+*.swo
+*~
+.cache/

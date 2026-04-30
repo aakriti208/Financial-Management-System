@@ -8,7 +8,7 @@ const NAV_LINKS = [
   { to: '/expenses',   label: 'Expenses'   },
   { to: '/tuition',    label: 'Tuition'    },
   { to: '/prediction', label: 'Prediction' },
-  { to: '/ai-advisor', label: 'AI Advisor' },
+  // { to: '/ai-advisor', label: 'AI Advisor' },
   // { to: '/simulation', label: 'Simulation' },
 ]
 
