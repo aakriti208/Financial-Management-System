@@ -21,7 +21,7 @@ public class TuitionController {
     public ResponseEntity<TuitionResultDTO> calculate(
             @AuthenticationPrincipal String email,
             @Valid @RequestBody TuitionRequestDTO request) {
-        TuitionResultDTO result = tuitionService.calculate(email, request);
+        TuitionResultDTO result = tuitionService.calculate(userDetails.getUsername(), request);
         return ResponseEntity.ok(result);
     }
 }

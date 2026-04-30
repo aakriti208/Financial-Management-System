@@ -11,8 +11,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-// EmbeddingService is injected for async vector indexing on save/update
-
 /**
  * Default implementation of {@link ExpenseService} providing CRUD operations
  * for a user's expense records.
