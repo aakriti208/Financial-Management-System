@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { login, register, logout } from './authService'
+import { login, register, logout } from '../services/authService'
 import api from '../api/axiosInstance'
 
 vi.mock('../api/axiosInstance', () => ({

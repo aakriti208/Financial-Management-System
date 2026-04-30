@@ -1,4 +1,6 @@
-package com.fms.service;
+package com.fms;
+
+import com.fms.service.ExpenseServiceImpl;
 
 import com.fms.dto.ExpenseDTO;
 import com.fms.model.*;

@@ -1,4 +1,6 @@
-package com.fms.service;
+package com.fms;
+
+import com.fms.service.IncomeServiceImpl;
 
 import com.fms.dto.IncomeDTO;
 import com.fms.model.Income;

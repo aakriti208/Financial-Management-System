@@ -1,4 +1,6 @@
-package com.fms.controller;
+package com.fms;
+
+import com.fms.controller.DashboardController;
 
 import com.fms.dto.DashboardSummaryDTO;
 import com.fms.dto.MonthlyDataDTO;

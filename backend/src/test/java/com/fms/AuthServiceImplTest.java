@@ -1,6 +1,7 @@
-package com.fms.service;
+package com.fms;
 
 import com.fms.config.JwtUtil;
+import com.fms.service.AuthServiceImpl;
 import com.fms.dto.AuthResponse;
 import com.fms.dto.LoginRequest;
 import com.fms.dto.RegisterRequest;

@@ -1,4 +1,6 @@
-package com.fms.config;
+package com.fms;
+
+import com.fms.config.JwtUtil;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import { describe, it, expect } from 'vitest'
-import SummaryCard from './SummaryCard'
+import SummaryCard from '../components/SummaryCard'
 
 describe('SummaryCard', () => {
   it('shows a dash when value is null', () => {

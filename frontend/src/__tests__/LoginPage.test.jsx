@@ -1,7 +1,7 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { MemoryRouter } from 'react-router-dom'
-import LoginPage from './LoginPage'
+import LoginPage from '../pages/LoginPage'
 import * as authService from '../services/authService'
 import { AuthProvider } from '../context/AuthContext'
 

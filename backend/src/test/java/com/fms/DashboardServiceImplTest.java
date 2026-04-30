@@ -1,4 +1,6 @@
-package com.fms.service;
+package com.fms;
+
+import com.fms.service.DashboardServiceImpl;
 
 import com.fms.dto.DashboardSummaryDTO;
 import com.fms.model.*;

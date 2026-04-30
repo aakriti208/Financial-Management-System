@@ -1,4 +1,6 @@
-package com.fms.controller;
+package com.fms;
+
+import com.fms.controller.AuthController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fms.dto.AuthResponse;

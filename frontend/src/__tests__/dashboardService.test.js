@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { getSummary } from './dashboardService'
+import { getSummary } from '../services/dashboardService'
 import api from '../api/axiosInstance'
 
 vi.mock('../api/axiosInstance', () => ({
